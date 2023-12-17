@@ -1,0 +1,32 @@
+/* .header {
+    max-width: 60rem;
+    margin: auto;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+  } */
+  
+  .list {
+    display: flex;
+    justify-content: space-between; /* This will distribute space evenly between items */
+  }
+  
+  .header a {
+    color: white !important; 
+    padding: 0 1rem;   
+    text-decoration: none;    
+   
+  }
+  
+  .header a:hover{
+    color: yellow !important;
+    font-weight: 600;
+  }
+  .header a:active,
+  .header a.active {
+    color: yellow !important;
+    /* padding-bottom: 0.25rem; */
+    border-bottom: 4px solid yellow;    
+  }
+
+  
