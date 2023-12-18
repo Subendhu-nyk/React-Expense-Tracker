@@ -6,6 +6,7 @@ import Auth from './Pages/Auth';
 import Home from './Pages/Home';
 import Product from './Pages/Product';
 import About from './Pages/About';
+import Expense from './Pages/Expense';
 
 
 function App() {
@@ -26,6 +27,9 @@ function App() {
    <Route path="/about">
    <About/>
    </Route> 
+   <Route path="/expense">
+   <Expense/>
+   </Route>
    </Switch>
 
  </Fragment>

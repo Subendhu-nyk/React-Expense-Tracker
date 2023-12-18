@@ -21,6 +21,7 @@
   .header a:hover{
     color: yellow !important;
     font-weight: 600;
+    font-size: 18px;
   }
   .header a:active,
   .header a.active {
