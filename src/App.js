@@ -7,6 +7,7 @@ import Home from './Pages/Home';
 import Product from './Pages/Product';
 import About from './Pages/About';
 import Expense from './Pages/Expense';
+import Profile from './Pages/Profile';
 
 
 function App() {
@@ -29,6 +30,9 @@ function App() {
    </Route> 
    <Route path="/expense">
    <Expense/>
+   </Route>
+   <Route path="/profile">
+   <Profile/>
    </Route>
    </Switch>
 

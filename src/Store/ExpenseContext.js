@@ -5,6 +5,8 @@ const ExpenseContext=React.createContext({
     isLoggedIn: false,
     login: (token) => {},
     logout: () => {}, 
+    completionPercentage: 0,
+    setCompletionPercentage: (percentage) => {},
 })
 
 export default ExpenseContext

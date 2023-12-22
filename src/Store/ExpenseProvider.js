@@ -5,6 +5,8 @@ export const ExpenseContextProvider = (props) => {
   const initialToken=localStorage.getItem('ExpenseToken')
   const [token, setToken] = useState(initialToken);
     const userIsLoggedIn = !!token;
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [completionPercentage, setCompletionPercentage] = useState(0);
   
     const loginHandler = (token) => {
       setToken(token);
@@ -21,6 +23,8 @@ export const ExpenseContextProvider = (props) => {
       isLoggedIn: userIsLoggedIn,
       login: loginHandler,
       logout: logoutHandler,
+      completionPercentage,
+       setCompletionPercentage,
     };
   
     return (
