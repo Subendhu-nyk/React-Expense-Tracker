@@ -6,22 +6,57 @@ import { Button, Col, Container, Row } from 'reactstrap';
 const ProfileForm = () => {
   
   const authCtx = useContext(ExpenseContext); 
-
   const [name,setName]=useState('')
   const [photo,setPhoto]=useState('')
+  const [fetchEmail,setFetchEmail]=useState('')
 
- 
+   const token=localStorage.getItem('ExpenseToken')
+
+  const fetchData = () => {
+    fetch('https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyB5Z4JytlQAizqhLj-UJaM2ypdJUZHt4s0', {
+      method: 'POST',
+      headers: {        
+        'Content-Type': 'application/json',      
+      },
+      body: JSON.stringify({
+        idToken: token
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("get request",data.users[0].email); 
+      setFetchEmail(data.users[0].email || '')
+      setName(data.users[0].displayName || ''); 
+    setPhoto(data.users[0].photoUrl || ''); 
+
+    })
+    .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+    });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []); 
   
 
   const calculateCompletionPercentage = () => {
     
-    let completedFields = 1;
+    let completedFields = 0;
     const totalFields = 3; 
 
-    const nameInput = document.getElementById('name');
-    const photoInput = document.getElementById('photo');
-    if (nameInput && nameInput.value.trim() !== '') completedFields++;
-    if (photoInput && photoInput.value.trim() !== '') completedFields++;
+    // const nameInput = document.getElementById('name');
+    // const photoInput = document.getElementById('photo');
+    // const emailInput = document.getElementById('email')
+   
+    if (name.trim() !== '') completedFields++;
+    if (photo.trim() !== '') completedFields++;
+    if (fetchEmail.trim() !== '') completedFields++;
 
     return (completedFields / totalFields) * 100;
   };
@@ -100,19 +135,27 @@ const ProfileForm = () => {
             </Col>
           </Row> 
           <form onSubmit={profileFormhandler}> 
-          <Row >
+          <Row className='my-4' >
             <Col lg='6'>
             <label htmlFor="name" className='pe-3'>Your Name :</label>
-            <input type="text" id="name" onChange={nameChangeHandler}/>
+            <input type="text" id="name" value={name} onChange={nameChangeHandler}/>
             </Col>
             <Col lg='6'>
             <label htmlFor="photo" className='pe-3'>Profile Photo URL :</label>
             <input
               type="text"
-              id="photo"  
+              id="photo" 
+              value={photo} 
               onChange={photoChangeHandler}        
             />
             </Col>
+          </Row> 
+          <Row>
+            <Col lg='6'>
+            <label htmlFor="email" className='pe-3'>Your Email :</label>
+            <input type="email" id="email" value={fetchEmail} disabled/>
+            </Col>
+          
           </Row> 
           <Row className='mt-5'>
           <Col lg='12'>

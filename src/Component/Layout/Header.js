@@ -52,7 +52,7 @@ const Header=(props)=>{
               {isLoggedIn && showProfileBadge && ( <NavLink to="/profile"><Badge color="light" className="text-dark text-decoration-none">Your profile is Incomplete. Complete now</Badge></NavLink>)}
               {isLoggedIn && !showProfileBadge && (
               <Badge color="light" className="text-dark text-decoration-none">Your
-                Profile  is {completionPercentage.toFixed(0)}% Completed.A complete profile <br/> will give  you  access to all features .Complete now
+                Profile  is {completionPercentage.toFixed(0)}% Completed.A complete profile <br/> will give  you  access to all features .{completionPercentage.toFixed(0)<100 ?'Complete now':'' }
               </Badge>
             )}
               </Col>
