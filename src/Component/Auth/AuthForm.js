@@ -131,12 +131,47 @@ const AuthForm = () => {
       .then(data => {
         console.log("verified data",data)
         alert('Email verified successfully.');
-        history.replace('/expense'); 
+        // history.replace('/expense'); 
       })
       .catch((err) => {
         console.error(err);
       });
-    };    
+      setTimeout(() => {
+        checkEmailVerification();
+      }, 30000);
+    };
+    
+    const checkEmailVerification = () => {
+      const token = localStorage.getItem('ExpenseToken');
+      if (!token) {
+        alert("You must be logged in to check verification.");
+        return;
+      }
+    
+      fetch('https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyB5Z4JytlQAizqhLj-UJaM2ypdJUZHt4s0', {
+        method: 'POST',
+        body: JSON.stringify({
+          idToken: token,
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+        if (data.users[0].emailVerified) {
+          alert('Email is verified!');
+          history.replace('/expense');
+        } else {
+          alert('Email is not verified yet. Please check your email and click the verification link.');
+        }
+      })
+      .catch(err => {
+        console.error('Error checking email verification:', err);
+      });
+    };
+    
 
 
   return (
@@ -145,7 +180,7 @@ const AuthForm = () => {
       <section className={`${classes.auth} bg-dark`}>
   
         {verify ? (
-          // Display the verification message when verify is true
+          
           <Fragment>
             <h2 style={{ fontFamily: "'Playfair Display', serif" }}>
               Congratulations on signing up!
@@ -160,7 +195,7 @@ const AuthForm = () => {
             <p>Resend verification email again in timer</p>
           </Fragment>
         ) : (
-          // Display the login/signup form when verify is false
+         
           <Fragment>
             <h1 style={{ fontFamily: "'Playfair Display', serif" }}>
               {isLogin ? "Login" : "Sign Up"}
