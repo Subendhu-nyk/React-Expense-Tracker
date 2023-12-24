@@ -1,7 +1,8 @@
-import { useState, useRef, useContext, Fragment } from "react";
+import { useState, useRef, useContext, Fragment,useEffect } from "react";
 import classes from "./AuthForm.module.css";
 import ExpenseContext from "../../Store/ExpenseContext";
 import { useHistory } from "react-router-dom";
+
 
 
 const AuthForm = () => {
@@ -13,6 +14,16 @@ const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [verify,setVerify]=useState(false)
+  const token=localStorage.getItem('ExpenseToken')
+
+  useEffect(() => {
+    const token = localStorage.getItem('ExpenseToken');
+    if (token) {
+      setVerify(true);
+    } else {
+      setVerify(false);
+    }
+  });
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -72,7 +83,7 @@ const AuthForm = () => {
         }
       }).then(data=>{
         console.log(data)  
-        console.log("data.idToken",data.idToken)     
+           
                 
         if (!isLogin) {
           setIsLogin(true)          
@@ -172,6 +183,9 @@ const AuthForm = () => {
       });
     };
     
+    const forgotPasswordHandler=()=>{
+      history.push('/forgot-password')
+    }
 
 
   return (
@@ -241,6 +255,7 @@ const AuthForm = () => {
                   <button
                     type="button"
                     className={classes.toggle}
+                    onClick={forgotPasswordHandler}
                   >
                     Forgot Password
                   </button>

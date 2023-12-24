@@ -1,5 +1,5 @@
 import React from 'react'
-import ProfileForm from '../Component/Auth/ProfileForm'
+import ProfileForm from '../Component/Profile/ProfileForm'
 
 const Profile = () => {
   return (

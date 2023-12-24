@@ -8,6 +8,7 @@ import Product from './Pages/Product';
 import About from './Pages/About';
 import Expense from './Pages/Expense';
 import Profile from './Pages/Profile';
+import ForgotPassword from './Pages/ForgotPassword';
 
 
 function App() {
@@ -33,6 +34,9 @@ function App() {
    </Route>
    <Route path="/profile">
    <Profile/>
+   </Route>
+   <Route path="/forgot-password">
+   <ForgotPassword/>
    </Route>
    </Switch>
 
