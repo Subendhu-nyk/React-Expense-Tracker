@@ -7,6 +7,10 @@ const ExpenseContext=React.createContext({
     logout: () => {}, 
     completionPercentage: 0,
     setCompletionPercentage: (percentage) => {},
+    items:[],
+    addItem:(item)=>{},
+    removeItem:(id)=>{},
+
 })
 
 export default ExpenseContext
