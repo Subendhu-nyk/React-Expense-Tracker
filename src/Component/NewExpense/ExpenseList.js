@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from 'react'
+import React, { Fragment, useContext, useEffect } from 'react'
 import { Container, Row,Col } from 'reactstrap'
 import classes from './ExpenseForm.module.css'
 import ExpenseItem from './ExpenseItem'
@@ -7,11 +7,39 @@ import ExpenseContext from '../../Store/ExpenseContext'
 const ExpenseList = () => {
  const expenseCtx=useContext(ExpenseContext)
 
+ useEffect(() => {
+  fetch('https://expense-tracker-2beae-default-rtdb.firebaseio.com/Expense.json', {
+      method: 'GET'
+  })
+  .then(response => {
+      if (!response.ok) {
+          throw new Error('Failed to fetch data');
+      }
+      return response.json();
+  })
+  .then(data => {
+      console.log('Fetched data:', data);
+      console.log('Fetched data:', data.name);
+      for (const key in data) {
+        expenseCtx.addItem({
+          id: key,
+          title: data[key].title,
+          amount: data[key].amount,
+          category: data[key].category
+        });
+      }
+      
+  })
+  .catch(error => {
+      console.error('Error fetching data:', error);
+  });
+}, []);
+
 const onRemove=(id)=>{
 expenseCtx.removeItem(id)
 }
 
-
+console.log("expense item",expenseCtx.items)
   return (
     <Fragment>
         <Container>         
