@@ -83,7 +83,7 @@ const ExpenseForm = (props) => {
         })
         .then(data => {
             console.log('Successfully added expense:', data);
-            // expenseCtx.addItem(expenseData); // Update context/state only after successful response
+            
             if (isEditing) {
                 expenseCtx.updateItem(currentId, expenseData); // Update the item in the context
             } else {

@@ -41,7 +41,28 @@ console.log("mounting")
 },[]);
 
 const onRemove=(id)=>{
-expenseCtx.removeItem(id)
+
+fetch(`https://expense-tracker-2beae-default-rtdb.firebaseio.com/Expense/${id}.json`,{
+  method:'DELETE',
+  headers:{
+    'Content-Type':'application/json'
+    }
+})
+.then((res)=>{
+  if (!res.ok) {
+    throw new Error('Failed to send data');
+}
+return res.json();
+})
+.then((data) => {
+  console.log('Successfully deleted expense:');
+  expenseCtx.removeItem(id)
+})
+.catch(error => {
+  console.error('Error:', error);
+  alert('An error occurred while deleting the expense.');
+});
+
 }
 
 const onEdit=(id)=>{
