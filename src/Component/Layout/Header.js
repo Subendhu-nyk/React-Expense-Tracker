@@ -15,7 +15,7 @@ const Header=(props)=>{
   const completionPercentage=authCtx.completionPercentage
   const location=useLocation()
   const [showProfileBadge, setShowProfileBadge] = useState(true);
-  console.log('isloggedin',isLoggedIn)
+  
 
   useEffect(() => {
     setShowProfileBadge(location.pathname !== "/profile");

@@ -1,4 +1,4 @@
-import React, { Fragment,useContext,useState } from 'react'
+import React, { Fragment,useContext,useState,useEffect } from 'react'
 import classes from  './ExpenseForm.module.css'
 import { Col, Container,Row } from 'reactstrap'
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -11,7 +11,9 @@ const ExpenseForm = (props) => {
     const[formVisible,setFormVisible]=useState(false)
     const[title,setTitle]=useState('')    
     const [amount,setAmount]=useState('')
-    const [category,setCategory]=useState('')   
+    const [category,setCategory]=useState('') 
+    const [isEditing, setIsEditing] = useState(false); 
+    const [currentId, setCurrentId] = useState(null); 
     
     const addExpenseHandler=()=>{
        setFormVisible(true)
@@ -30,6 +32,21 @@ const ExpenseForm = (props) => {
         setCategory(value)
     }    
 
+
+    
+    useEffect(() => {
+        if (expenseCtx.editedItem && expenseCtx.editedItem.length > 0) {
+            setFormVisible(true);
+            setIsEditing(true);
+            const editedExpense = expenseCtx.editedItem[0];
+            setTitle(editedExpense.title);
+            setAmount(editedExpense.amount);
+            setCategory(editedExpense.category);
+            setCurrentId(editedExpense.id);
+        }
+    }, [expenseCtx.editedItem]);
+
+
     const submitForm=(event)=>{
         event.preventDefault();
         if(title.trim().length===0||amount.trim().length===0||category.trim().length===0){
@@ -43,11 +60,16 @@ const ExpenseForm = (props) => {
          }
         
         const expenseData={
-           id:Math.random(),title,amount,category
+           title,amount,category
         }
 
-        fetch('https://expense-tracker-2beae-default-rtdb.firebaseio.com/Expense.json',{
-            method:'POST',
+        const url=isEditing? `https://expense-tracker-2beae-default-rtdb.firebaseio.com/Expense/${currentId}.json` // PUT URL with ID
+        : 'https://expense-tracker-2beae-default-rtdb.firebaseio.com/Expense.json'; // POST URL
+
+        const method = isEditing ? 'PUT' : 'POST';
+
+        fetch(url,{
+            method:method,
             body:JSON.stringify(expenseData),       
              headers:{
             'Content-Type':'application/json'
@@ -61,20 +83,30 @@ const ExpenseForm = (props) => {
         })
         .then(data => {
             console.log('Successfully added expense:', data);
-            expenseCtx.addItem(expenseData); // Update context/state only after successful response
+            // expenseCtx.addItem(expenseData); // Update context/state only after successful response
+            if (isEditing) {
+                expenseCtx.updateItem(currentId, expenseData); // Update the item in the context
+            } else {
+                expenseCtx.addItem(expenseData); // Add the item to the context
+            }
+           
             setTitle('');
             setCategory('');
             setAmount('');
-            setFormVisible(false)
+            setFormVisible(false);
+            setIsEditing(false); 
+            setCurrentId(null);
         })
         .catch(error => {
             console.error('Error:', error);
             alert('An error occurred while saving the expense.');
-        });    
-       
-    }
+        });  
+        
+               
+    }    
 
-    console.log('expenseCtx',expenseCtx)
+
+  
 
   return (
    <Fragment>

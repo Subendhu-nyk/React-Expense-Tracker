@@ -13,17 +13,10 @@ const AuthForm = () => {
   const history=useHistory()
   const [isLogin, setIsLogin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [verify,setVerify]=useState(false)
-  const token=localStorage.getItem('ExpenseToken')
-
-  useEffect(() => {
-    const token = localStorage.getItem('ExpenseToken');
-    if (token) {
-      setVerify(true);
-    } else {
-      setVerify(false);
-    }
-  });
+  const [verify,setVerify]=useState(true)
+  const [token,setToken]=useState(false)
+  const isToken=localStorage.getItem('ExpenseToken')
+ 
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -69,7 +62,7 @@ const AuthForm = () => {
       ).then((res)=>{
         setIsLoading(false)
         
-        if(res.ok){
+        if(res.ok){               
           return res.json();
         }else{
          return res.json().then(data=>{
@@ -81,20 +74,21 @@ const AuthForm = () => {
           throw new Error(errorMessage);                
           })
         }
-      }).then(data=>{
-        console.log(data)  
+      }).then(data=>{      
            
                 
         if (!isLogin) {
-          setIsLogin(true)          
+          setIsLogin(true)                 
           emailInputRef.current.value = "";
           passwordInputRef.current.value = "";
           confirmPasswordInputRef.current.value = "";
           
       } else {
-        console.log("data.idToken2",data.idToken)
+        
         authCtx.login(data.idToken)
-        setVerify(true);
+        setToken(true)
+        checkEmailVerification();
+      
        
         // history.replace('/expense');
       }
@@ -102,6 +96,7 @@ const AuthForm = () => {
       .catch((err)=>{
         alert(err.message)
       })
+      
     };
 
     const verifyHandler = (event) => {
@@ -125,8 +120,9 @@ const AuthForm = () => {
         }
       })
       .then((res) => {
+        console.log("verify handler",res)
         if (res.ok) {
-          return res.json();
+          return res.json();          
         } else {
           return res.json().then(data => {
             let errorMessage = 'Failed to verify email.';
@@ -140,23 +136,21 @@ const AuthForm = () => {
         }
       })
       .then(data => {
-        console.log("verified data",data)
+        console.log("verified data",data)        
         alert('Email verified successfully.');
         // history.replace('/expense'); 
       })
       .catch((err) => {
         console.error(err);
-      });
-      setTimeout(() => {
-        checkEmailVerification();
-      }, 30000);
+      });      
+
     };
     
     const checkEmailVerification = () => {
       const token = localStorage.getItem('ExpenseToken');
       if (!token) {
-        alert("You must be logged in to check verification.");
-        return;
+      alert("You must be logged in to check verification.");
+      return;
       }
     
       fetch('https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyB5Z4JytlQAizqhLj-UJaM2ypdJUZHt4s0', {
@@ -173,9 +167,11 @@ const AuthForm = () => {
         console.log(data)
         if (data.users[0].emailVerified) {
           alert('Email is verified!');
+          setVerify(true)
           history.replace('/expense');
-        } else {
+        } else {          
           alert('Email is not verified yet. Please check your email and click the verification link.');
+          setVerify(false)
         }
       })
       .catch(err => {
@@ -187,14 +183,15 @@ const AuthForm = () => {
       history.push('/forgot-password')
     }
 
+    console.log("cart logout",authCtx.isLoggedIn)
+
 
   return (
     <div className={classes.containerRelative}>
       <div className={classes.blueDesign}></div>
       <section className={`${classes.auth} bg-dark`}>
   
-        {verify ? (
-          
+        {!verify && token && authCtx.isLoggedIn && (          
           <Fragment>
             <h2 style={{ fontFamily: "'Playfair Display', serif" }}>
               Congratulations on signing up!
@@ -208,9 +205,9 @@ const AuthForm = () => {
             <h5>Didn't receive the email?</h5>
             <p>Resend verification email again in timer</p>
           </Fragment>
-        ) : (
+        ) }
          
-          <Fragment>
+       {(verify || !authCtx.isLoggedIn) && <Fragment>
             <h1 style={{ fontFamily: "'Playfair Display', serif" }}>
               {isLogin ? "Login" : "Sign Up"}
             </h1>
@@ -263,7 +260,7 @@ const AuthForm = () => {
               </div>
             </form>
           </Fragment>
-        )}
+          }
   
       </section> 
     </div>     

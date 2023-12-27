@@ -10,6 +10,10 @@ const ExpenseContext=React.createContext({
     items:[],
     addItem:(item)=>{},
     removeItem:(id)=>{},
+    editItem:(id)=>{},
+    setItem:()=>{},
+    editedItem:[],
+    updateItem:(id,item)=>{}
 
 })
 

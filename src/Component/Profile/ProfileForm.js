@@ -44,7 +44,7 @@ const ProfileForm = () => {
     fetchData();
   }, []); 
   
-
+  console.log("fetchemail",fetchEmail)
   const calculateCompletionPercentage = () => {
     
     let completedFields = 0;
@@ -61,13 +61,10 @@ const ProfileForm = () => {
     return (completedFields / totalFields) * 100;
   };
 
-
-
-
   useEffect(() => {
     const percentage = calculateCompletionPercentage();
     authCtx.setCompletionPercentage(percentage);
-  }, [name, photo, authCtx]);
+  }, [name, photo,fetchEmail, authCtx]);
  
 
   const profileFormhandler=(event)=>{

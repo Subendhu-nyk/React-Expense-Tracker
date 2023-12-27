@@ -8,6 +8,7 @@ export const ExpenseContextProvider = (props) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [completionPercentage, setCompletionPercentage] = useState(0);
   const [items,updateItems]=useState([]) 
+  const [editedItem, setEditedItem] = useState(null);
 
   
     const loginHandler = (token) => {
@@ -21,8 +22,12 @@ export const ExpenseContextProvider = (props) => {
     };
 
     const addItemToCartHandler=item=>{
-      updateItems([...items,item])             
-      // postCartData(item);
+      if(Array.isArray(item)){
+        updateItems([...items,...item])
+      }else{
+      updateItems([...items,item])     
+      }       
+      
   }
 
   const removeItemFromHandler=id=>{
@@ -31,7 +36,21 @@ export const ExpenseContextProvider = (props) => {
     updateItems(updatedItems)     
     // removeItem(id)
   }
+  const editItemFromHandler=id=>{     
+    const updatedItems=items.filter((item)=>item.id===id)    
+    console.log("edited",updatedItems)
+    setEditedItem(updatedItems)
+    
+  }
 
+  const updateItemHandler = (id, updatedItem) => {
+    const updatedItems = items.map(item => 
+        item.id === id ? { ...item, ...updatedItem } : item
+    );
+    updateItems(updatedItems);
+};
+ 
+    
   
     const contextValue = {
       token: token,
@@ -42,7 +61,10 @@ export const ExpenseContextProvider = (props) => {
        setCompletionPercentage,
        items:items,
        addItem:addItemToCartHandler,
-        removeItem:removeItemFromHandler,
+      removeItem:removeItemFromHandler,
+      editItem:editItemFromHandler,
+      editedItem:editedItem,
+      updateItem: updateItemHandler    
 
     };
   

@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react'
 import ExpenseList from './ExpenseList'
 
-const ExpenseDeatils = () => {
+const ExpenseDetails = () => {
   return (
      <div><ExpenseList/></div>
      )
 }
 
-export default ExpenseDeatils
+export default ExpenseDetails
