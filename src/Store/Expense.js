@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialExpenseState={totalAmount:0}
+const initialExpenseState={totalAmount:0,darkMode:false}
+
 
 const expenseSlice=createSlice({
     name:'expense',
@@ -12,6 +13,9 @@ const expenseSlice=createSlice({
         resetTotalAmount(state) {
             state.totalAmount = 0; 
         },
+        toggleTheme(state){
+            state.darkMode=!state.darkMode
+        }
     }
 })
 export const expenseActions=expenseSlice.actions;

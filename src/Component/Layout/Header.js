@@ -9,11 +9,12 @@ import { Dispatch } from "@reduxjs/toolkit"
 import { authActions } from "../../Store/Auth"
 import { useDispatch, useSelector } from "react-redux"
 import { expenseActions } from "../../Store/Expense"
-
+import classes from './Header.module.css'
 
 const Header=(props)=>{
   const dispatch=useDispatch()
   const totalExpenseObject=useSelector((state)=>state.expense.totalAmount)
+  const isDarkMode = useSelector((state) => state.expense.darkMode);
   const totalExpense = totalExpenseObject ? totalExpenseObject.payload : 0;
   const history=useHistory();
   const authCtx=useContext(ExpenseContext)  
@@ -36,6 +37,21 @@ const Header=(props)=>{
     history.replace('/')
   }
 
+  useEffect(() => {
+    // Apply the initial theme
+    document.body.classList.remove('dark-theme', 'light-theme');
+    
+    if (isDarkMode) {
+      document.body.classList.add('dark-theme');
+  } else {
+      document.body.classList.add('light-theme');
+  }
+  }, [isDarkMode]);
+
+  const toggleThemeHandler = () => {   
+    dispatch(expenseActions.toggleTheme());    
+  };
+  console.log(isDarkMode)
     
 
     return(
@@ -58,7 +74,7 @@ const Header=(props)=>{
           </Col>
           <Col lg={6} >
             <Row>
-              <Col lg={6} className="mt-4">
+              <Col lg={5} className="mt-4">
               {!isLoggedIn && (<MenuItem/>)}
               {isLoggedIn && showProfileBadge && ( <NavLink to="/profile"><Badge color="light" className="text-dark text-decoration-none">Your profile is Incomplete. Complete now</Badge></NavLink>)}
               {isLoggedIn && !showProfileBadge && (
@@ -67,11 +83,14 @@ const Header=(props)=>{
               </Badge>
             )}
               </Col>
-              <Col lg={4} className="mt-3 pt-1">              
-              { totalExpense>=10000 && <Button onClick={logoutHandler}  color="success"
-              >Activate Premium</Button>}   
+              <Col lg={3} className="mt-3 pt-1 text-end">              
+              { totalExpense>=10000 && <Button  color="success"
+              >Buy Premium</Button>}   
               </Col>
-              <Col lg={2} className="mt-3 pt-1">
+              <Col lg={2} className="text-center mt-4">
+              <input type="checkbox" className={isDarkMode ? 'dark-theme' : 'light-theme'}   onChange={toggleThemeHandler}/>
+              </Col>
+              <Col lg={2} className="mt-3 pt-1">              
               {isLoggedIn && (<Button onClick={logoutHandler}  color="warning"
     outline>Logout</Button>)}   
               </Col>
