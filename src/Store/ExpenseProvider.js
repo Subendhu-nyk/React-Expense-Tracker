@@ -50,6 +50,9 @@ export const ExpenseContextProvider = (props) => {
     updateItems(updatedItems);
 };
  
+const clearItemHandler=()=>{
+  updateItems([])
+}
     
   
     const contextValue = {
@@ -64,7 +67,8 @@ export const ExpenseContextProvider = (props) => {
       removeItem:removeItemFromHandler,
       editItem:editItemFromHandler,
       editedItem:editedItem,
-      updateItem: updateItemHandler    
+      updateItem: updateItemHandler,
+      clearItems:clearItemHandler    
 
     };
   

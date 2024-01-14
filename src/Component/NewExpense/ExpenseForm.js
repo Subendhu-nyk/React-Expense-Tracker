@@ -3,11 +3,14 @@ import classes from  './ExpenseForm.module.css'
 import { Col, Container,Row } from 'reactstrap'
 import Dropdown from 'react-bootstrap/Dropdown';
 import ExpenseContext from '../../Store/ExpenseContext';
+import { useSelector } from 'react-redux';
 
 
 
 const ExpenseForm = (props) => {
     const expenseCtx=useContext(ExpenseContext)
+    const reducerToken=useSelector((state) => state.auth.token);
+    const reducerUserId = useSelector((state) => state.auth.userId);
     const[formVisible,setFormVisible]=useState(false)
     const[title,setTitle]=useState('')    
     const [amount,setAmount]=useState('')
@@ -46,7 +49,7 @@ const ExpenseForm = (props) => {
         }
     }, [expenseCtx.editedItem]);
 
-
+    console.log("expense user id",reducerUserId,typeof(reducerUserId))
     const submitForm=(event)=>{
         event.preventDefault();
         if(title.trim().length===0||amount.trim().length===0||category.trim().length===0){
@@ -60,11 +63,11 @@ const ExpenseForm = (props) => {
          }
         
         const expenseData={
-           title,amount,category
+           title,amount,category,uId:reducerUserId
         }
-
-        const url=isEditing? `https://expense-tracker-2beae-default-rtdb.firebaseio.com/Expense/${currentId}.json` // PUT URL with ID
-        : 'https://expense-tracker-2beae-default-rtdb.firebaseio.com/Expense.json'; // POST URL
+      
+        const url=isEditing? `https://expense-tracker-2beae-default-rtdb.firebaseio.com/Expense/${reducerUserId}/${currentId}.json` // PUT URL with ID
+        : `https://expense-tracker-2beae-default-rtdb.firebaseio.com/Expense/${reducerUserId}.json`; // POST URL
 
         const method = isEditing ? 'PUT' : 'POST';
 

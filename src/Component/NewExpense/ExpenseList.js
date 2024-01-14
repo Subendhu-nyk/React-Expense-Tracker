@@ -3,14 +3,19 @@ import { Container, Row,Col } from 'reactstrap'
 import classes from './ExpenseForm.module.css'
 import ExpenseItem from './ExpenseItem'
 import ExpenseContext from '../../Store/ExpenseContext'
+import { useDispatch, useSelector } from 'react-redux'
+import { expenseActions } from '../../Store/Expense'
 
 const ExpenseList = () => {
  const expenseCtx=useContext(ExpenseContext)
-console.log("mounting")
+ const dispatch=useDispatch()
+ const totalExpense=useSelector((state)=>state.expense.totalAmount)
+ const reducerUserId = useSelector((state) => state.auth.userId);
+
 
  useEffect(() => {
-  console.log("fetch called")
-  fetch('https://expense-tracker-2beae-default-rtdb.firebaseio.com/Expense.json', {
+
+  fetch(`https://expense-tracker-2beae-default-rtdb.firebaseio.com/Expense/${reducerUserId}.json`, {
       method: 'GET'
   })  
   .then(response => {
@@ -20,11 +25,9 @@ console.log("mounting")
       return response.json();
   })
   .then(data => {
-      console.log('Fetched data:', data); 
-          
+                  
       const fetchedItems = [];
-      for (const key in data) {  
-        console.log("key", key);
+      for (const key in data) {          
         fetchedItems.push({
           id: key,
           title: data[key].title,
@@ -38,11 +41,11 @@ console.log("mounting")
   .catch(error => {
       console.error('Error fetching data:', error);
   });
-},[]);
+},[reducerUserId]);
 
 const onRemove=(id)=>{
 
-fetch(`https://expense-tracker-2beae-default-rtdb.firebaseio.com/Expense/${id}.json`,{
+fetch(`https://expense-tracker-2beae-default-rtdb.firebaseio.com/Expense/${reducerUserId}/${id}.json`,{
   method:'DELETE',
   headers:{
     'Content-Type':'application/json'
@@ -65,12 +68,18 @@ return res.json();
 
 }
 
-const onEdit=(id)=>{
-  
+const onEdit=(id)=>{  
   expenseCtx.editItem(id)
   }
 
-  console.log("cart context",expenseCtx)
+  useEffect(() => {
+    const totalAmount = expenseCtx.items.reduce((sum, item) => {
+      return sum + parseFloat(item.amount); // Ensure item.amount is a number
+    }, 0);  
+    dispatch(expenseActions.totalAmount({payload:totalAmount}));
+  }, [expenseCtx.items, dispatch]);
+  
+ 
   return (
     <Fragment>
         <Container>         

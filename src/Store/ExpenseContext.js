@@ -13,7 +13,8 @@ const ExpenseContext=React.createContext({
     editItem:(id)=>{},
     setItem:()=>{},
     editedItem:[],
-    updateItem:(id,item)=>{}
+    updateItem:(id,item)=>{},
+    clearItems:()=>{}
 
 })
 

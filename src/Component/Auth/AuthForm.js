@@ -2,6 +2,8 @@ import { useState, useRef, useContext, Fragment,useEffect } from "react";
 import classes from "./AuthForm.module.css";
 import ExpenseContext from "../../Store/ExpenseContext";
 import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { authActions } from "../../Store/Auth";
 
 
 
@@ -11,13 +13,16 @@ const AuthForm = () => {
   const confirmPasswordInputRef = useRef();
   const authCtx=useContext(ExpenseContext)
   const history=useHistory()
+  const dispatch=useDispatch()
+  const isAuth=useSelector(state=>state.auth.isAuthenticated)
+
   const [isLogin, setIsLogin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [verify,setVerify]=useState(true)
   const [token,setToken]=useState(false)
   const isToken=localStorage.getItem('ExpenseToken')
  
-
+  console.log("auth action login",isAuth)
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
   };
@@ -78,15 +83,22 @@ const AuthForm = () => {
            
                 
         if (!isLogin) {
-          setIsLogin(true)                 
+          setIsLogin(true)                      
           emailInputRef.current.value = "";
           passwordInputRef.current.value = "";
           confirmPasswordInputRef.current.value = "";
           
       } else {
-        
+       
         authCtx.login(data.idToken)
+        console.log("auth data",data.localId)
         setToken(true)
+        authCtx.clearItems()  
+         /////////////
+          // reducer
+          // dispatch(authActions.login())
+          dispatch(authActions.login({ token: data.idToken, userId: data.localId }))  
+          ///////////  
         checkEmailVerification();
       
        
