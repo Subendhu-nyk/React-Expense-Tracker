@@ -33,7 +33,7 @@ const Header=(props)=>{
     /////////////////
     dispatch(authActions.logout())
     dispatch(expenseActions.resetTotalAmount())
-    dispatch(expenseActions.activePremium())
+    dispatch(expenseActions.deactivatePremium())
     ///////////////////
     authCtx.logout();
     history.replace('/')

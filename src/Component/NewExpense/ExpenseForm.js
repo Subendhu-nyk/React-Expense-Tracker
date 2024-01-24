@@ -66,8 +66,8 @@ const ExpenseForm = (props) => {
            title,amount,category,uId:reducerUserId
         }
       
-        const url=isEditing? `https://expense-tracker-2beae-default-rtdb.firebaseio.com/Expense/${reducerUserId}/${currentId}.json` // PUT URL with ID
-        : `https://expense-tracker-2beae-default-rtdb.firebaseio.com/Expense/${reducerUserId}.json`; // POST URL
+        const url=isEditing? `https://expense-tracker-c1dbc-default-rtdb.firebaseio.com//Expense/${reducerUserId}/${currentId}.json` // PUT URL with ID
+        : `https://expense-tracker-c1dbc-default-rtdb.firebaseio.com//Expense/${reducerUserId}.json`; // POST URL
 
         const method = isEditing ? 'PUT' : 'POST';
 

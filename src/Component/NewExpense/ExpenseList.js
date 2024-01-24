@@ -15,7 +15,7 @@ const ExpenseList = () => {
 
  useEffect(() => {
 
-  fetch(`https://expense-tracker-2beae-default-rtdb.firebaseio.com/Expense/${reducerUserId}.json`, {
+  fetch(`https://expense-tracker-c1dbc-default-rtdb.firebaseio.com/Expense/${reducerUserId}.json`, {
       method: 'GET'
   })  
   .then(response => {
@@ -45,7 +45,7 @@ const ExpenseList = () => {
 
 const onRemove=(id)=>{
 
-fetch(`https://expense-tracker-2beae-default-rtdb.firebaseio.com/Expense/${reducerUserId}/${id}.json`,{
+fetch(`https://expense-tracker-c1dbc-default-rtdb.firebaseio.com/Expense/${reducerUserId}/${id}.json`,{
   method:'DELETE',
   headers:{
     'Content-Type':'application/json'

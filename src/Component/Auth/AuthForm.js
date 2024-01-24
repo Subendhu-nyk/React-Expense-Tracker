@@ -47,10 +47,10 @@ const AuthForm = () => {
     setIsLoading(true)
     let url   
     if(isLogin){
-      url='https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyB5Z4JytlQAizqhLj-UJaM2ypdJUZHt4s0'
+      url='https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDH4DyZzbLoWc7nzdJqI72hsePe0P2T2hI'
 
     }else{
-      url='https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyB5Z4JytlQAizqhLj-UJaM2ypdJUZHt4s0'
+      url='https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDH4DyZzbLoWc7nzdJqI72hsePe0P2T2hI'
     }
       fetch(url,
       {
@@ -120,7 +120,7 @@ const AuthForm = () => {
         return;
       }
     
-      fetch('https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyB5Z4JytlQAizqhLj-UJaM2ypdJUZHt4s0', {
+      fetch('https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyDH4DyZzbLoWc7nzdJqI72hsePe0P2T2hI', {
         method: 'POST',
         body: JSON.stringify({
           idToken: token,
@@ -149,7 +149,8 @@ const AuthForm = () => {
       })
       .then(data => {
         console.log("verified data",data)        
-        alert('Email verified successfully.');
+        alert('Please check your email and verify your account.');
+        setTimeout(() => checkEmailVerification(), 60000)
         // history.replace('/expense'); 
       })
       .catch((err) => {
@@ -165,7 +166,7 @@ const AuthForm = () => {
       return;
       }
     
-      fetch('https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyB5Z4JytlQAizqhLj-UJaM2ypdJUZHt4s0', {
+      fetch('https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyDH4DyZzbLoWc7nzdJqI72hsePe0P2T2hI', {
         method: 'POST',
         body: JSON.stringify({
           idToken: token,
